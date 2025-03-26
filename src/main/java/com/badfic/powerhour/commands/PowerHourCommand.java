@@ -23,18 +23,17 @@ import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PowerHourCommand extends BaseSlashCommand {
-    private static final List<Command.@NotNull Choice> COMMAND_CHOICES = List.of(
-            new Command.Choice("START", "START"),
-            new Command.Choice("PAUSE", "PAUSE"),
-            new Command.Choice("RESUME", "RESUME"),
-            new Command.Choice("STATUS", "STATUS"),
-            new Command.Choice("STOP", "STOP")
-    );
+    private static final Command.Choice[] COMMAND_CHOICES = {
+        new Command.Choice("START", "START"),
+        new Command.Choice("PAUSE", "PAUSE"),
+        new Command.Choice("RESUME", "RESUME"),
+        new Command.Choice("STATUS", "STATUS"),
+        new Command.Choice("STOP", "STOP")
+    };
 
     private final AudioPlayerManager audioPlayerManager;
     private final Map<Long, AudioPlayer> guildPlayerMap;
@@ -108,7 +107,7 @@ public class PowerHourCommand extends BaseSlashCommand {
                 }
 
                 audioPlayer.setPaused(true);
-                replyToInteractionHook(event, interactionHook, "⏸\uFE0F Power Hour has been paused. Use /powerhour RESUME to resume.");
+                replyToInteractionHook(event, interactionHook, "⏸️ Power Hour has been paused. Use /powerhour RESUME to resume.");
                 return;
             }
             case "RESUME" -> {
@@ -119,7 +118,7 @@ public class PowerHourCommand extends BaseSlashCommand {
                 }
 
                 audioPlayer.setPaused(false);
-                replyToInteractionHook(event, interactionHook, "▶\uFE0F Power Hour has been resumed. Use /powerhour PAUSE to pause again.");
+                replyToInteractionHook(event, interactionHook, "▶️ Power Hour has been resumed. Use /powerhour PAUSE to pause again.");
                 return;
             }
             case "STOP" -> {
@@ -131,7 +130,7 @@ public class PowerHourCommand extends BaseSlashCommand {
                 }
 
                 guild.getAudioManager().closeAudioConnection();
-                replyToInteractionHook(event, interactionHook, "⏹\uFE0F Power Hour has been stopped. User /powerhour START to start over.");
+                replyToInteractionHook(event, interactionHook, "⏹️ Power Hour has been stopped. Use /powerhour START to start over.");
                 return;
             }
         }
@@ -166,7 +165,7 @@ public class PowerHourCommand extends BaseSlashCommand {
         event.replyChoices(COMMAND_CHOICES).queue();
     }
 
-    private AudioPlayer getGuildAudioPlayer(Guild guild) {
+    private AudioPlayer getGuildAudioPlayer(final Guild guild) {
         guildPlayerLock.readLock().lock();
         try {
             return guildPlayerMap.get(guild.getIdLong());
