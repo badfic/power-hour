@@ -1,11 +1,10 @@
 package com.badfic.powerhour;
 
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import java.lang.invoke.MethodHandles;
-import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -86,8 +85,8 @@ public class PowerHourConfiguration {
     public JDA jda(final ThreadPoolTaskScheduler taskScheduler,
                    final ExecutorService executorService,
                    final OkHttpClient okHttpClient,
-                   final MessageListener messageListener) throws Exception {
-        final var intents = Arrays.asList(GatewayIntent.GUILD_VOICE_STATES);
+                   final MessageListener messageListener) {
+        final var intents = List.of(GatewayIntent.GUILD_VOICE_STATES);
 
         return JDABuilder.create(botToken, intents)
                 .disableCache(CacheFlag.ACTIVITY, CacheFlag.EMOJI, CacheFlag.CLIENT_STATUS, CacheFlag.ONLINE_STATUS, CacheFlag.FORUM_TAGS,

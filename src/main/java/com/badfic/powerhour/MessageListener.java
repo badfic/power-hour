@@ -10,23 +10,25 @@ import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInterac
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.session.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import org.apache.commons.collections4.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MessageListener extends ListenerAdapter {
     private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    @Autowired
-    private PowerHourConfiguration powerHourConfiguration;
+    private final PowerHourConfiguration powerHourConfiguration;
+    private final List<BaseSlashCommand> slashCommands;
 
-    @Autowired
-    private List<BaseSlashCommand> slashCommands;
+    public MessageListener(final PowerHourConfiguration powerHourConfiguration, final List<BaseSlashCommand> slashCommands) {
+        this.powerHourConfiguration = powerHourConfiguration;
+        this.slashCommands = slashCommands;
+    }
 
     @Override
     public void onReady(@NotNull final ReadyEvent event) {
@@ -48,11 +50,11 @@ public class MessageListener extends ListenerAdapter {
 
             commandListUpdateAction.submit().whenComplete((success, err) -> {
                 if (err != null) {
-                    log.error("Failed to upsert slash command(s) {}", success.stream().map(net.dv8tion.jda.api.interactions.commands.Command::getName).collect(Collectors.joining(", ")), err);
+                    log.error("Failed to upsert slash command(s) {}", success.stream().map(Command::getName).collect(Collectors.joining(", ")), err);
                     return;
                 }
 
-                log.info("Successfully upserted slash command(s) {}", success.stream().map(net.dv8tion.jda.api.interactions.commands.Command::getName).collect(Collectors.joining(", ")));
+                log.info("Successfully upserted slash command(s) {}", success.stream().map(Command::getName).collect(Collectors.joining(", ")));
             });
         }
     }
