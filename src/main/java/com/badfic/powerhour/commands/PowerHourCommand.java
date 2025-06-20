@@ -78,14 +78,14 @@ public class PowerHourCommand extends BaseSlashCommand {
 
         switch (actionName) {
             case "HELP" -> {
-                final var description = "/powerhour is a drinking game that involves drinking once every minute for an hour.\n" +
+                final var description = "Power Hour is a drinking game that involves drinking once every minute for an hour.\n" +
                         "The Power Hour bot facilitates starting an audio reminder that will play every one minute in a voice channel that you are connected to.\n\n" +
                         "* /powerhour START to start a power hour in the voice channel you are actively connected to.\n" +
                         "* /powerhour PAUSE to pause an actively running power hour.\n" +
                         "* /powerhour RESUME to resume a paused power hour. It will pick up at the same minute it left off at.\n" +
                         "* /powerhour STATUS to find out how much time is left in a running power hour.\n" +
-                        "* /powerhour STOP to stop the power hour. Use /powerhour STATUS to check the status of a running power hour.\n";
-                final var embed = new MessageEmbed(null, "Power Hour", description, EmbedType.RICH, OffsetDateTime.now(), 0, null, null, null, null, null, null, null);
+                        "* /powerhour STOP to stop the power hour.";
+                final var embed = new MessageEmbed(null, "/powerhour HELP", description, EmbedType.RICH, OffsetDateTime.now(), 0, null, null, null, null, null, null, null);
                 replyToInteractionHook(event, interactionHook, embed);
                 return;
             }
