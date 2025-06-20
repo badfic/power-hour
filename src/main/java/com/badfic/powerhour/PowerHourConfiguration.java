@@ -99,7 +99,7 @@ public class PowerHourConfiguration {
                 .setHttpClient(okHttpClient)
                 .addEventListeners(messageListener)
                 .setAudioPool(taskScheduler.getScheduledExecutor(), false)
-                .setActivity(Activity.playing("Power Hour"))
+                .setActivity(Activity.playing("/powerhour HELP"))
                 .build();
     }
 }

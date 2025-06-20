@@ -6,6 +6,7 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.tools.io.NonSeekableInputStream;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +14,9 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import net.dv8tion.jda.api.entities.EmbedType;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
@@ -28,6 +31,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class PowerHourCommand extends BaseSlashCommand {
     private static final Command.Choice[] COMMAND_CHOICES = {
+        new Command.Choice("HELP", "HELP"),
         new Command.Choice("START", "START"),
         new Command.Choice("PAUSE", "PAUSE"),
         new Command.Choice("RESUME", "RESUME"),
@@ -44,8 +48,8 @@ public class PowerHourCommand extends BaseSlashCommand {
         this.guildPlayerMap = new HashMap<>();
         this.guildPlayerLock = new ReentrantReadWriteLock();
         name = "powerhour";
-        help = "Start, Pause, Resume, Get the Status or Stop a Power Hour in your current voice channel";
-        options = List.of(new OptionData(OptionType.STRING, "action", "Start, Pause, Resume, Status, or Stop", true, true));
+        help = "Help, Start, Pause, Resume, Get the Status or Stop a Power Hour in your current voice channel";
+        options = List.of(new OptionData(OptionType.STRING, "action", "Help, Start, Pause, Resume, Status, or Stop", true, true));
     }
 
     @Override
@@ -73,6 +77,18 @@ public class PowerHourCommand extends BaseSlashCommand {
         final var actionName = action.getAsString().toUpperCase().strip();
 
         switch (actionName) {
+            case "HELP" -> {
+                final var description = "/powerhour is a drinking game that involves drinking once every minute for an hour.\n" +
+                        "The Power Hour bot facilitates starting an audio reminder that will play every one minute in a voice channel that you are connected to.\n\n" +
+                        "* /powerhour START to start a power hour in the voice channel you are actively connected to.\n" +
+                        "* /powerhour PAUSE to pause an actively running power hour.\n" +
+                        "* /powerhour RESUME to resume a paused power hour. It will pick up at the same minute it left off at.\n" +
+                        "* /powerhour STATUS to find out how much time is left in a running power hour.\n" +
+                        "* /powerhour STOP to stop the power hour. Use /powerhour STATUS to check the status of a running power hour.\n";
+                final var embed = new MessageEmbed(null, "Power Hour", description, EmbedType.RICH, OffsetDateTime.now(), 0, null, null, null, null, null, null, null);
+                replyToInteractionHook(event, interactionHook, embed);
+                return;
+            }
             case "STATUS" -> {
                 final var audioPlayer = getGuildAudioPlayer(guild);
                 if (audioPlayer == null) {
