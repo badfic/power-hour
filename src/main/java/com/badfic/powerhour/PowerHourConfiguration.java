@@ -1,5 +1,6 @@
 package com.badfic.powerhour;
 
+import club.minnced.discord.jdave.interop.JDaveSessionFactory;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
@@ -10,6 +11,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.audio.AudioModuleConfig;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
@@ -99,6 +101,7 @@ public class PowerHourConfiguration {
                 .setHttpClient(okHttpClient)
                 .addEventListeners(messageListener)
                 .setAudioPool(taskScheduler.getScheduledExecutor(), false)
+                .setAudioModuleConfig(new AudioModuleConfig().withDaveSessionFactory(new JDaveSessionFactory()))
                 .setActivity(Activity.playing("/powerhour HELP"))
                 .build();
     }
