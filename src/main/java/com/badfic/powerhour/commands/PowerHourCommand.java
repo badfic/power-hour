@@ -6,7 +6,6 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.tools.io.NonSeekableInputStream;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
-import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,9 +13,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import net.dv8tion.jda.api.entities.EmbedType;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
@@ -85,7 +83,10 @@ public class PowerHourCommand extends BaseSlashCommand {
                         "* /powerhour RESUME to resume a paused power hour. It will pick up at the same minute it left off at.\n" +
                         "* /powerhour STATUS to find out how much time is left in a running power hour.\n" +
                         "* /powerhour STOP to stop the power hour.";
-                final var embed = new MessageEmbed(null, "/powerhour HELP", description, EmbedType.RICH, OffsetDateTime.now(), 0, null, null, null, null, null, null, null);
+                final var embed = new EmbedBuilder()
+                    .setDescription(description)
+                    .setTitle("/powerhour HELP")
+                    .build();
                 replyToInteractionHook(event, interactionHook, embed);
                 return;
             }
